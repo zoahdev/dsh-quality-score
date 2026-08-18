@@ -171,18 +171,18 @@ export async function scorePackage(
   const latestMeta = latest !== null ? info.versions?.[latest] : undefined
   const latestTime = latest !== null ? info.time?.[latest] : undefined
 
-  // 1. Manifest completeness (max 20)
+  // 1. Manifest completeness (max 30)
   {
-    const earned = (asString(latestMeta?.name) !== null ? 5 : 0)
-      + (asString(latestMeta?.version) !== null ? 5 : 0)
-      + (asString(latestMeta?.description) !== null ? 5 : 0)
-      + (asString(latestMeta?.license) !== null ? 5 : 0)
+    const earned = (asString(latestMeta?.name) !== null ? 7 : 0)
+      + (asString(latestMeta?.version) !== null ? 7 : 0)
+      + (asString(latestMeta?.description) !== null ? 8 : 0)
+      + (asString(latestMeta?.license) !== null ? 8 : 0)
     if (asString(latestMeta?.description) === null) issues.push('latest version has no description')
     if (asString(latestMeta?.license) === null) issues.push('latest version has no license')
     components.push({
       id: 'manifest',
       name: 'Manifest completeness',
-      max: 20,
+      max: 30,
       earned,
       note: latest !== null ? `version ${latest}` : 'no latest version',
     })

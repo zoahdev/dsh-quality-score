@@ -76,10 +76,10 @@ describe('scorePackage', () => {
     expect(result.schema).toBe('dsh-quality-score/v1')
     expect(result.ok).toBe(true)
     expect(result.error).toBe('')
-    expect(result.score).toBeGreaterThanOrEqual(85)
+    expect(result.score).toBeGreaterThanOrEqual(95)
     expect(result.grade).toBe('A')
     const manifest = result.components.find((c) => c.id === 'manifest')
-    expect(manifest?.earned).toBe(20)
+    expect(manifest?.earned).toBe(30)
   })
 
   it('penalizes broken dsh-tools latest and dead peer ranges (#2763)', async () => {
@@ -102,10 +102,10 @@ describe('scorePackage', () => {
       'dead-peer': null,
     }
     const result = await scorePackage('test-pkg', { fetchImpl: makeFetch(map), now })
-    expect(result.score).toBeLessThan(70)
+    expect(result.score).toBeLessThan(80)
     expect(result.issues.some((i) => i.includes('#2763'))).toBe(true)
     expect(result.issues.some((i) => i.includes('dead-peer'))).toBe(true)
-    expect(result.grade).toMatch(/[CDEF]/)
+    expect(result.grade).toMatch(/[BCDEF]/)
   })
 
   it('penalizes latest!=next', async () => {
@@ -155,7 +155,7 @@ describe('manifest reads description/license from full metadata (regression: cor
     }
     const result = await scorePackage('test-pkg', { fetchImpl: makeFetch(map), now })
     const manifest = result.components.find((c) => c.id === 'manifest')
-    expect(manifest?.earned).toBe(20)
+    expect(manifest?.earned).toBe(30)
     expect(result.issues.some((i) => i.includes('description'))).toBe(false)
     expect(result.issues.some((i) => i.includes('license'))).toBe(false)
   })
@@ -206,6 +206,6 @@ describe('renderScore', () => {
     const result: ScoreResult = await scorePackage('test-pkg', { fetchImpl: makeFetch(map), now })
     const text = renderScore(result).join('\n')
     expect(text).toContain('dsh-quality-score — test-pkg:')
-    expect(text).toContain('/20]')
+    expect(text).toContain('/30]')
   })
 })
