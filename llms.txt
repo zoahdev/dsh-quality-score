@@ -1,0 +1,8 @@
+# dsh-quality-score
+
+Quality scorecard for DeepSeek Harness (dsh) plugins: 0-100 score + grade + per-component breakdown (manifest, peer resolvability, dist-tag health, dead ranges, freshness, dsh-tools peer compat) with issues and fix suggestions.
+
+- Install into dsh: `dsh plugin add dsh-quality-score`
+- CLI: `npx dsh-quality-score <npm-name> [--json]`
+- Agent tool: `quality_score(name)` — returns dsh-quality-score/v1 reports
+- Zero runtime dependencies, read-only, degrades gracefully offline
