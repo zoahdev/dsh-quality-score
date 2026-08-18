@@ -185,6 +185,18 @@ describe('scoreBatch / renderLeaderboard', () => {
 })
 
 describe('extractRegistryNames', () => {
+  it('filters by category', () => {
+    const reg = {
+      plugins: [
+        { install: { target: 'npm', spec: 'dsh-a' }, category: 'security' },
+        { install: { target: 'npm', spec: 'dsh-b' }, category: 'dev' },
+        { install: { target: 'git', spec: 'github:x/y' }, category: 'dev' },
+      ],
+    }
+    expect(extractRegistryNames(reg, 'dev')).toEqual(['dsh-b'])
+    expect(extractRegistryNames(reg, 'security')).toEqual(['dsh-a'])
+  })
+
   it('extracts unique npm-installable names and ignores git targets', () => {
     const reg = {
       plugins: [

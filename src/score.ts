@@ -326,11 +326,12 @@ export type RegistryLike = {
   plugins?: Array<{ install?: { target?: unknown; spec?: unknown } }>
 }
 
-/** Extract unique npm-installable package names from a dsh-subscribe registry. */
-export function extractRegistryNames(reg: RegistryLike): string[] {
+/** Extract unique npm-installable package names from a dsh-subscribe registry, optionally filtered by category. */
+export function extractRegistryNames(reg: RegistryLike, category?: string): string[] {
   const raw: string[] = []
   for (const p of reg.plugins ?? []) {
     if (p?.install?.target === 'npm' && typeof p.install.spec === 'string' && p.install.spec !== '') {
+      if (category !== undefined && (p as { category?: unknown }).category !== category) continue
       raw.push(p.install.spec)
     }
   }

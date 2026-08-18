@@ -14,7 +14,7 @@ function usage(): string {
     'Usage:',
     '  dsh-quality-score <npm-name> [--json]',
     '  dsh-quality-score --batch <names-file> [--json]',
-    '  dsh-quality-score --batch-registry <registry.json> [--json]',
+    '  dsh-quality-score --batch-registry <registry.json> [--category <name>] [--json]',
     '',
     'Options:',
     '  --json            print the machine-readable dsh-quality-score/v1 report(s)',
@@ -31,6 +31,7 @@ export async function main(argv: string[]): Promise<number> {
   let name: string | null = null
   let batch: string | null = null
   let batchRegistry: string | null = null
+  let category: string | null = null
   let json = false
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]
@@ -40,6 +41,14 @@ export async function main(argv: string[]): Promise<number> {
       batch = argv[++i] ?? ''
       if (batch === '') {
         process.stderr.write(`dsh-quality-score: --batch requires a file path\n\n${usage()}\n`)
+        return 2
+      }
+      continue
+    }
+    if (arg === '--category') {
+      category = argv[++i] ?? ''
+      if (category === '') {
+        process.stderr.write(`dsh-quality-score: --category requires a name\n\n${usage()}\n`)
         return 2
       }
       continue
@@ -66,7 +75,7 @@ export async function main(argv: string[]): Promise<number> {
     if (batchRegistry !== null) {
       const reg = JSON.parse(readFileSync(batchRegistry, 'utf8'))
       const plugins = Array.isArray(reg?.plugins) ? reg.plugins : []
-      const names = extractRegistryNames(reg)
+      const names = extractRegistryNames(reg, category ?? undefined)
       const results = await scoreBatch(names)
       if (json) {
         process.stdout.write(JSON.stringify(results, null, 2) + '\n')
