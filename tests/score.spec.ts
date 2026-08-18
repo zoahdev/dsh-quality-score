@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { scorePackage, scoreBatch, gradeOf, renderScore, renderLeaderboard, type ScoreResult } from '../src/score.js'
+import { scorePackage, scoreBatch, gradeOf, renderScore, renderLeaderboard, extractRegistryNames, type ScoreResult } from '../src/score.js'
 
 function mkInfo(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
@@ -167,6 +167,22 @@ describe('scoreBatch / renderLeaderboard', () => {
     const text = renderLeaderboard(results).join('\n')
     expect(text).toContain('| 1 | good-pkg |')
     expect(text).toContain('| 2 | bad-pkg |')
+  })
+})
+
+describe('extractRegistryNames', () => {
+  it('extracts unique npm-installable names and ignores git targets', () => {
+    const reg = {
+      plugins: [
+        { install: { target: 'npm', spec: 'dsh-a' } },
+        { install: { target: 'npm', spec: 'dsh-a' } },
+        { install: { target: 'npm', spec: '@scope/dsh-b' } },
+        { install: { target: 'git', spec: 'github:x/y' } },
+        { install: { target: 'npm', spec: '' } },
+        {},
+      ],
+    }
+    expect(extractRegistryNames(reg)).toEqual(['dsh-a', '@scope/dsh-b'])
   })
 })
 

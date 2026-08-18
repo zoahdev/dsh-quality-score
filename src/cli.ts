@@ -5,7 +5,7 @@
  */
 
 import { readFileSync } from 'node:fs'
-import { scorePackage, scoreBatch, renderScore, renderLeaderboard } from './score.js'
+import { scorePackage, scoreBatch, renderScore, renderLeaderboard, extractRegistryNames } from './score.js'
 
 function usage(): string {
   return [
@@ -14,6 +14,7 @@ function usage(): string {
     'Usage:',
     '  dsh-quality-score <npm-name> [--json]',
     '  dsh-quality-score --batch <names-file> [--json]',
+    '  dsh-quality-score --batch-registry <registry.json> [--json]',
     '',
     'Options:',
     '  --json            print the machine-readable dsh-quality-score/v1 report(s)',
@@ -29,6 +30,7 @@ function usage(): string {
 export async function main(argv: string[]): Promise<number> {
   let name: string | null = null
   let batch: string | null = null
+  let batchRegistry: string | null = null
   let json = false
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]
@@ -38,6 +40,14 @@ export async function main(argv: string[]): Promise<number> {
       batch = argv[++i] ?? ''
       if (batch === '') {
         process.stderr.write(`dsh-quality-score: --batch requires a file path\n\n${usage()}\n`)
+        return 2
+      }
+      continue
+    }
+    if (arg === '--batch-registry') {
+      batchRegistry = argv[++i] ?? ''
+      if (batchRegistry === '') {
+        process.stderr.write(`dsh-quality-score: --batch-registry requires a registry.json path\n\n${usage()}\n`)
         return 2
       }
       continue
@@ -53,6 +63,18 @@ export async function main(argv: string[]): Promise<number> {
     name = arg
   }
   try {
+    if (batchRegistry !== null) {
+      const reg = JSON.parse(readFileSync(batchRegistry, 'utf8'))
+      const plugins = Array.isArray(reg?.plugins) ? reg.plugins : []
+      const names = extractRegistryNames(reg)
+      const results = await scoreBatch(names)
+      if (json) {
+        process.stdout.write(JSON.stringify(results, null, 2) + '\n')
+      } else {
+        process.stdout.write(renderLeaderboard(results).join('\n') + '\n')
+      }
+      return 0
+    }
     if (batch !== null) {
       const names = readFileSync(batch, 'utf8')
         .split(/\r?\n/)
