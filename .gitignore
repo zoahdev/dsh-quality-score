@@ -4,3 +4,6 @@ lib
 *.log
 scores-offline.json
 work-batch-names.txt
+
+scores.json
+leaderboard.md
