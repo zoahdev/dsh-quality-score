@@ -25,6 +25,7 @@ npx dsh-quality-score dsh-dep-audit
 ```sh
 dsh-quality-score <npm-name> [--json]
 dsh-quality-score --batch <names-file> [--json]
+dsh-quality-score --batch-registry <registry.json> [--json]
 ```
 
 Prints the score, grade, component breakdown, issues and suggestions. `--batch` scores every package name in a file (one per line, `#` comments ignored) and prints a ranked leaderboard — the building block for a registry-wide quality table.
