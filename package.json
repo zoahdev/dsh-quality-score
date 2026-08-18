@@ -56,5 +56,16 @@
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
-  }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zoahdev/dsh-quality-score.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zoahdev/dsh-quality-score/issues"
+  },
+  "homepage": "https://github.com/zoahdev/dsh-quality-score"
 }
