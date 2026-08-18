@@ -70,12 +70,12 @@ function encodeName(name: string): string {
   return name.startsWith('@') ? name.replace('/', '%2F') : name
 }
 
-export async function fetchRegistryInfo(name: string, fetchImpl: typeof fetch, timeoutMs = 15000): Promise<RegistryInfo | null> {
+export async function fetchRegistryInfo(name: string, fetchImpl: typeof fetch, timeoutMs = 15000, accept = 'application/vnd.npm.install-v1+json'): Promise<RegistryInfo | null> {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
   try {
     const res = await fetchImpl(`https://registry.npmjs.org/${encodeName(name)}`, {
-      headers: { accept: 'application/vnd.npm.install-v1+json' },
+      headers: { accept },
       signal: controller.signal,
     })
     if (res.status === 404) return null
@@ -84,6 +84,16 @@ export async function fetchRegistryInfo(name: string, fetchImpl: typeof fetch, t
   } finally {
     clearTimeout(timer)
   }
+}
+
+/**
+ * Full metadata doc for the scored package itself. The abbreviated (corgi)
+ * doc omits `description` / `license` per version, which would mis-score the
+ * manifest component; the full doc has them. Dependency lookups stay on the
+ * abbreviated doc (only version lists matter there).
+ */
+export async function fetchFullRegistryInfo(name: string, fetchImpl: typeof fetch, timeoutMs = 30000): Promise<RegistryInfo | null> {
+  return fetchRegistryInfo(name, fetchImpl, timeoutMs, 'application/json')
 }
 
 function declaredRanges(meta: Meta | undefined): Array<{ name: string; range: string; source: 'dep' | 'peer' }> {
@@ -115,7 +125,7 @@ export async function scorePackage(
 
   let info: RegistryInfo | null
   try {
-    info = await fetchRegistryInfo(name, fetchImpl)
+    info = await fetchFullRegistryInfo(name, fetchImpl)
   } catch (error) {
     return {
       schema: 'dsh-quality-score/v1',

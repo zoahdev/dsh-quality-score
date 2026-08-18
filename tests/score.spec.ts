@@ -147,6 +147,20 @@ describe('graceful offline', () => {
   })
 })
 
+describe('manifest reads description/license from full metadata (regression: corgi omits them)', () => {
+  it('awards manifest points when the full doc has description and license', async () => {
+    const map = {
+      'test-pkg': mkInfo(),
+      '@deepseek-ai/dsh-tools': dshToolsOk,
+    }
+    const result = await scorePackage('test-pkg', { fetchImpl: makeFetch(map), now })
+    const manifest = result.components.find((c) => c.id === 'manifest')
+    expect(manifest?.earned).toBe(20)
+    expect(result.issues.some((i) => i.includes('description'))).toBe(false)
+    expect(result.issues.some((i) => i.includes('license'))).toBe(false)
+  })
+})
+
 describe('scoreBatch / renderLeaderboard', () => {
   it('scores multiple packages sharing the cache and ranks them', async () => {
     const map = {

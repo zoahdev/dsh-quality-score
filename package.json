@@ -1,6 +1,6 @@
 {
   "name": "dsh-quality-score",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Quality scorecard for DeepSeek Harness (dsh) plugins: 0-100 score with grade and per-component breakdown (manifest, peer resolvability, dist-tag health, dead ranges, freshness, docs, dsh-tools peer compat). Zero runtime dependencies, read-only. CLI + agent-callable quality_score tool.",
   "type": "module",
   "main": "lib/index.js",
