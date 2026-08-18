@@ -58,10 +58,10 @@ const now = () => Date.parse('2026-08-18T00:00:00Z')
 
 describe('gradeOf', () => {
   it('maps scores to grades', () => {
-    expect(gradeOf(95)).toBe('A')
-    expect(gradeOf(80)).toBe('B')
-    expect(gradeOf(65)).toBe('C')
-    expect(gradeOf(50)).toBe('D')
+    expect(gradeOf(96)).toBe('A')
+    expect(gradeOf(88)).toBe('B')
+    expect(gradeOf(72)).toBe('C')
+    expect(gradeOf(58)).toBe('D')
     expect(gradeOf(20)).toBe('F')
   })
 })

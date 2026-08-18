@@ -77,7 +77,7 @@ Returns a `dsh-quality-score/v1` report:
 | `freshness` | 10 | latest release within 365 days |
 | `dsh-tools-peer` | 10 | declared dsh-tools peer satisfied by the current latest dist-tag |
 
-Grade: A ≥ 90 · B ≥ 75 · C ≥ 60 · D ≥ 45 · F below.
+Grade: A ≥ 95 · B ≥ 85 · C ≥ 70 · D ≥ 55 · F below.
 
 ## Why it exists
 
@@ -139,7 +139,7 @@ npx dsh-quality-score --batch registry-names.txt   # 批量评分，输出质量
 | `freshness` | 10 | latest 发布时间是否在 365 天内 |
 | `dsh-tools-peer` | 10 | 声明的 dsh-tools peer 是否被当前 latest 满足 |
 
-等级：A ≥ 90 · B ≥ 75 · C ≥ 60 · D ≥ 45 · F 以下。
+等级：A ≥ 95 · B ≥ 85 · C ≥ 70 · D ≥ 55 · F 以下。
 
 ## 为什么需要它
 
