@@ -1,5 +1,7 @@
 # dsh-quality-score
 
+[![npm](https://img.shields.io/npm/v/dsh-quality-score.svg)](https://www.npmjs.com/package/dsh-quality-score)
+
 [![CI](https://github.com/zoahdev/dsh-quality-score/actions/workflows/ci.yml/badge.svg)](https://github.com/zoahdev/dsh-quality-score/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![dsh-plugin](https://img.shields.io/badge/dsh--plugin-verified-blue)](https://github.com/topics/dsh-plugin)
